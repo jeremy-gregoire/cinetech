@@ -1,5 +1,4 @@
 const keyAPI = "8c4b867188ee47a1d4e40854b27391ec";
-
 const options = { method: "GET", headers: { accept: "application/json" } };
 
 async function fetchData() {
@@ -14,18 +13,12 @@ async function fetchData() {
 
     const container = document.getElementById("dataAPI");
     const element = document.createElement("div");
-    element.innerHTML = `Titre du film : ${movie.title} <br/> Id du film : ${movie.id}`; //c'est ici pour faire en sorte que les titres de films soient des liens
+    element.innerHTML = `Titre du film : <a href="${movie.url}">${movie.title}</a> <br /> Id du film : ${movie.id}`;
     container.appendChild(element);
   });
+
+  const parseData = JSON.stringify(data);
+  localStorage.setItem("movieData", parseData);
+  console.log("donnée sotcké dans le local storage");
 }
 fetchData();
-
-// pour concaténer des élements lors de l'impression console / dans le web
-const firstName = "John";
-const lastName = "Doe";
-const fullName = firstName.concat(" ", lastName);
-console.log(fullName); // "John Doe"
-//la concaténation ne marche qu'entre :
-// chaine de caractère et nombre
-// string et string
-// nbr et nbr
