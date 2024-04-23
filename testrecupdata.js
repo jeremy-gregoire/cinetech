@@ -16,9 +16,5 @@ async function fetchData() {
     element.innerHTML = `Titre du film : <a href="${movie.url}">${movie.title}</a> <br /> Id du film : ${movie.id}`;
     container.appendChild(element);
   });
-
-  const parseData = JSON.stringify(data);
-  localStorage.setItem("movieData", parseData);
-  console.log("donnée sotcké dans le local storage");
 }
 fetchData();
