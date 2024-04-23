@@ -21,11 +21,11 @@ async function fetchData() {
     const element = document.createElement("div");
     const pageDetails = "./details.html";
     //element.innerHTML = `<a href="${movie.url} ?id" target="_blank">${movie.title} ${movie.id}</a>`;
-    element.innerHTML = `<a href="${pageDetails}?id=${movie.id}" target="_blank">${movie.title} : ${movie.id}</a>`;
+    element.innerHTML = `<a href="${pageDetails}?id=${movie.id}">${movie.title} : ${movie.id}</a>`;
 
     container.appendChild(element);
 
-    localStorage.setItem("movieData", JSON.stringify(data)); //permet de mettre les données dans le locol storage
+    //localStorage.setItem("movieData", JSON.stringify(data)); //permet de mettre les données dans le locol storage
   });
 }
 fetchData();
