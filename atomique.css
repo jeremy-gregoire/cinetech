@@ -1,0 +1,58 @@
+body {
+  margin: none;
+  background-color: hsl(0, 0%, 55%);
+}
+
+.fullscreen-img {
+  width: 100%;
+  height: 100vh;
+  object-fit: cover;
+  position: relative;
+  box-shadow: 0px 0px 20px 20px black;
+}
+
+#container{
+  display: grid;
+}
+
+#bandeau{
+  position: relative;
+}
+
+#poster{
+  position: absolute;
+  z-index: +1;
+  left : 50px;
+  top : 50px;
+}
+
+#details{
+  background-color: aquamarine;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  width: 50%;
+  left: 35%;
+  top : 15%;
+  z-index: +1;
+}
+
+#pitch{
+  background-color: bisque;
+  margin-top : 25px;
+}
+
+#companies{
+  background-color: red;
+}
+
+#cast{
+  background-color: yellow;
+}
+
+#suggestion{
+  background-color: chartreuse;
+}
+
+
+

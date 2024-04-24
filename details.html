@@ -4,17 +4,30 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Data API</title>
+    <link rel="stylesheet" href="./bootstrap.min.css" />
+    <link rel="stylesheet" href="./atomique.css" />
+    <script src="./bootstrap.min.js" defer></script>
     <script src="details.js" defer></script>
   </head>
   <body>
-    <style>
-      body {
-        font-family: Arial, Helvetica, sans-serif;
-      }
-    </style>
     <main>
       <a href="./testrecupdata.html">retour à l'acceuil</a>
-      <div id="recupid"></div>
+      <!-- to place the hero under the poster  -->
+      <div id="container">
+        <div id="bandeau">
+          <div id="poster"></div>
+          <div id="title"></div>
+          <div id="details" class="container m-auto">
+            <div id="small_info"></div>
+            <div id="language_info"></div>
+            <div id="pitch"></div>
+            <div id="statistic"></div>
+          </div>
+        </div>
+      </div>
+      <div id="companies"></div>
+      <div id="cast"></div>
+      <div id="suggestion"></div>
     </main>
   </body>
 </html>
