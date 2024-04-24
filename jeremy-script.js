@@ -48,3 +48,21 @@ export async function getCarouselSelections() {
     throw error;
   }
 }
+
+export async function getPopularSeries() {
+  let url = `https://api.themoviedb.org/3/tv/popular?language=fr-FR&page=1`;
+
+  try {
+    let response = await fetch(url, OPTIONS);
+
+    if (!response.ok && response.status !== 200) {
+      console.error('Impossible to get the series!');
+      return;
+    }
+
+    let data = await response.json();
+    return data.results;
+  } catch (error) {
+    throw error;
+  }
+}
