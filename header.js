@@ -1,4 +1,4 @@
-import { getMoviesAndSeriesAutocompletion } from './jeremy-scripts.js';
+import { getMoviesAndSeriesAutocompletion } from './header-scripts.js';
 
 const searchBar = document.querySelector('#searchBar');
 const btnSearch = document.querySelector('#btnSearch');
