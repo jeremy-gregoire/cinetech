@@ -1,5 +1,4 @@
-const API_KEY =
-  'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJjNmZjY2QwMTIwZDk0MDhlMGI0NWU0ZTIzZGY4NDIyZiIsInN1YiI6IjY2Mjc1NjU3MjU4ODIzMDE3ZDkzYWUyMCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.zML1TcSHnqMrf5F2yVrQyOsLmCmsbjncCBqk_36Fn9g';
+const API_KEY = '';
 const OPTIONS = {
   method: 'GET',
   headers: {
