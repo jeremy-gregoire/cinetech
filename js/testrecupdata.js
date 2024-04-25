@@ -19,7 +19,7 @@ async function fetchData() {
 
     const container = document.getElementById("dataAPI");
     const element = document.createElement("div");
-    const pageDetails = "./details.html";
+    const pageDetails = "./pages/details.html";
     //element.innerHTML = `<a href="${movie.url} ?id" target="_blank">${movie.title} ${movie.id}</a>`;
     element.innerHTML = `<a href="${pageDetails}?id=${movie.id}">${movie.title} : ${movie.id}</a>`;
 
