@@ -1,0 +1,17 @@
+.series-container {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr); /* 7 séries par colonne */
+  gap: 20px; /* Espacement entre les séries */
+}
+
+.series-item {
+  padding: 10px;
+  background-color: #f0f0f0;
+  border-radius: 5px;
+}
+
+.series-item img {
+  width: 100%;
+  height: auto;
+  border-radius: 5px;
+}
