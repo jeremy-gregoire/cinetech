@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Data API</title>
+    <link rel="stylesheet" href="../css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../css/atomique.css" />
+    <script src="../js/bootstrap.min.js" defer></script>
+    <script src="../js/header.js" defer></script>
+    <script src="../js/details.js" defer></script>
+  </head>
+  <body>
+    <main>
+      <!-- bandeau est le container parent dans lequel je met un background -->
+      <div id="bandeau">
+        <div id="background">
+          <!-- et ici ce sont les éléments présent DANS le bandeau -->
+          <div id="poster"></div>
+          <div id="details" class="container shadow rounded bg-light bg-opacity-75">
+            <div id="title"></div>
+            <div id="small_info"></div>
+            <div id="language_info"></div>
+            <div id="pitch" class="text-center rounded shadow m-2"></div>
+            <div id="statistic" class="m-3"></div>
+          </div>
+        </div>
+      </div>
+      <h2 class="container-fluid mb-3 p-4 bg-light shadow">CASTING</h2>
+      <div
+        id="cast"
+        class="container d-flex flex-column flex-wrap m-auto overflow-x-scroll h-100 rounded-2"
+      ></div>
+      <h2 class="container-fluid mt-3 mb-3 p-4 bg-light shadow">FILMS SIMILAIRES</h2>
+      <div id="suggestion" class="container d-flex flex-wrap m-auto justify-content-center"></div>
+      <h2 class="container-fluid mt-3 mb-3 p-4 bg-light shadow">COMMENTAIRES</h2>
+      <div id="rate" class="container d-flex flex-column justify-content-center mb-4"></div>
+
+      <div id="letCommitGet" class="container d-flex flex-column justify-content-center mb-4"></div>
+
+      <div id="letCommit" class="container flex-column justify-content-center mb-4 w-50">
+        <div>
+          <h3 class="text-center pb-4">Donner votre avis sur le film !</h3>
+          <div class="input-group mb-3">
+            <input
+              id="user"
+              type="text"
+              class="form-control"
+              placeholder="Nom d'utilisateur"
+              aria-label="Username"
+              aria-describedby="basic-addon1"
+            />
+            <span class="input-group-text" id="basic-addon1">O</span>
+          </div>
+
+          <div class="input-group mb-3">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Adresse mail"
+              aria-label="Recipient's username"
+              aria-describedby="basic-addon2"
+            />
+            <span class="input-group-text" id="basic-addon2">@</span>
+          </div>
+
+          <div class="input-group">
+            <textarea
+              id="commentary"
+              class="form-control"
+              style="height: 250px"
+              placeholder="Taper votre commentaire"
+            ></textarea>
+          </div>
+
+          <div class="text-center">
+            <button id="btnPost" type="button" class="btn btn-primary m-4 p-3">
+              Poster le commentaire
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>
