@@ -1,10 +1,43 @@
 const TOKEN = '';
 
-const FAVORITES = [];
+const moviesContainer = document.querySelector('#moviesContainer');
 
-function updateMovieListing() {}
+const FAVORITES = JSON.parse(window.localStorage.getItem('favorites')) || [];
+console.log(FAVORITES);
 
-fetch('https://api.themoviedb.org/3/movie/popular', {
+function updateMovieListing(movies) {
+  moviesContainer.replaceChildren();
+
+  movies.forEach((movie) => {
+    const isFavorite = FAVORITES.filter((favorite) => movie.id === favorite.id).length > 0;
+    console.log(isFavorite);
+
+    const movieItem = document.createElement('div');
+    moviesContainer.appendChild(movieItem);
+
+    const p = document.createElement('p');
+    p.style.color = isFavorite ? 'green' : 'red';
+    p.innerText = `Titre : ${movie.title}`;
+    movieItem.appendChild(p);
+
+    const button = document.createElement('button');
+    button.innerText = isFavorite ? 'Enlever des favoris' : 'Ajouter aux favoris';
+    movieItem.appendChild(button);
+
+    button.addEventListener('click', () => {
+      if (isFavorite) {
+        FAVORITES.splice(FAVORITES.indexOf(movie), 1);
+      } else {
+        FAVORITES.push(movie);
+      }
+
+      window.localStorage.setItem('favorites', JSON.stringify(FAVORITES));
+      updateMovieListing(movies);
+    });
+  });
+}
+
+fetch('https://api.themoviedb.org/3/movie/popular?language=fr-FR', {
   method: 'GET',
   headers: {
     accept: 'application/json',
@@ -13,20 +46,6 @@ fetch('https://api.themoviedb.org/3/movie/popular', {
 })
   .then((response) => response.json())
   .then((data) => {
-    const movies = data.results;
-
-    movies.forEach((movie) => {
-      const movieItem = document.createElement('div');
-      document.body.appendChild(movieItem);
-
-      const p = document.createElement('p');
-      p.style.color = FAVORITES.includes(movie) ? 'green' : 'red';
-      p.innerText = `Titre : ${movie.title}`;
-      movieItem.appendChild(p);
-
-      const button = document.createElement('button');
-      button.innerText = FAVORITES.includes(movie) ? 'Enlever des favoris' : 'Ajouter aux favoris';
-      movieItem.appendChild(button);
-    });
+    updateMovieListing(data.results);
   })
   .catch((error) => console.error(error));
