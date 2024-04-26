@@ -1,17 +1,26 @@
-const API_KEY = '';
-const OPTIONS = {
-  method: 'GET',
-  headers: {
-    accept: 'application/json',
-    Authorization: `Bearer ${API_KEY}`,
-  },
+const TheMovieDBAPI = {
+  token: '',
+  baseURL: 'https://api.themoviedb.org',
+  version: '3',
+};
+
+const Application = {
+  apiURL: `${TheMovieDBAPI.baseURL}/${TheMovieDBAPI.version}`,
+  defaultLanguage: 'fr-FR',
 };
 
 export async function getMoviesAndSeriesAutocompletion() {
-  let urlMovies = ' https://api.themoviedb.org/3/movie/popular?language=fr-FR';
-  let urlSeries = ' https://api.themoviedb.org/3/tv/popular?language=fr-FR';
+  let urlMovies = `${Application.apiURL}/movie/popular?language=${Application.defaultLanguage}`;
+  let urlSeries = `${Application.apiURL}/tv/popular?language=${Application.defaultLanguage}`;
 
   try {
+    const OPTIONS = {
+      method: 'GET',
+      headers: {
+        accept: 'application/json',
+        Authorization: `Bearer ${TheMovieDBAPI.token}`,
+      },
+    };
     let responses = await Promise.all([fetch(urlMovies, OPTIONS), fetch(urlSeries, OPTIONS)]);
 
     if (responses.every((response) => !response.ok && response.status !== 200)) {
@@ -29,10 +38,16 @@ export async function getMoviesAndSeriesAutocompletion() {
 }
 
 export async function getPopularMovies() {
-  let url = `https://api.themoviedb.org/3/movie/popular?language=fr-FR&page=1`;
+  let url = `${Application.apiURL}/movie/popular?language=${Application.defaultLanguage}&page=1`;
 
   try {
-    let response = await fetch(url, OPTIONS);
+    let response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        accept: 'application/json',
+        Authorization: `Bearer ${TheMovieDBAPI.token}`,
+      },
+    });
 
     if (!response.ok && response.status !== 200) {
       console.error('Impossible to get the movies!');
@@ -47,10 +62,17 @@ export async function getPopularMovies() {
 }
 
 export async function getCarouselSelections() {
-  let urlMovies = 'https://api.themoviedb.org/3/movie/now_playing?language=fr-FR&page=1';
-  let urlSeries = 'https://api.themoviedb.org/3/tv/on_the_air?language=fr-FR&page=1';
+  let urlMovies = `${Application.apiURL}/movie/now_playing?language=${Application.defaultLanguage}&page=1`;
+  let urlSeries = `${Application.apiURL}/tv/on_the_air?language=${Application.defaultLanguage}&page=1`;
 
   try {
+    const OPTIONS = {
+      method: 'GET',
+      headers: {
+        accept: 'application/json',
+        Authorization: `Bearer ${TheMovieDBAPI.token}`,
+      },
+    };
     let responses = await Promise.all([fetch(urlMovies, OPTIONS), fetch(urlSeries, OPTIONS)]);
 
     if (responses.every((response) => !response.ok && response.status !== 200)) {
@@ -74,10 +96,16 @@ export async function getCarouselSelections() {
 }
 
 export async function getPopularSeries() {
-  let url = `https://api.themoviedb.org/3/tv/popular?language=fr-FR&page=1`;
+  let url = `${Application.apiURL}/tv/popular?language=${Application.defaultLanguage}&page=1`;
 
   try {
-    let response = await fetch(url, OPTIONS);
+    let response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        accept: 'application/json',
+        Authorization: `Bearer ${TheMovieDBAPI.token}`,
+      },
+    });
 
     if (!response.ok && response.status !== 200) {
       console.error('Impossible to get the series!');
