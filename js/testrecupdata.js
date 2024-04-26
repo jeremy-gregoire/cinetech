@@ -1,31 +1,38 @@
 const keyAPI = "8c4b867188ee47a1d4e40854b27391ec";
-const options = { 
-  method: "GET", // méthode GET --> envoyer au serveur 
-  headers: { 
+const options = {
+  method: "GET", // méthode GET --> envoyer au serveur
+  headers: {
     accept: "application/json", // dire que je prend du JSON
-    Authorization :"",
-  } }; 
+    Authorization: "",
+  },
+};
 // le authorized --> dire que j'ai cette clé et qu'on est dans les clous -->
 
 async function fetchData() {
-  const response = await fetch(`https://api.themoviedb.org/3/movie/now_playing?api_key=${keyAPI}`);
-  const data = await response.json();
-  console.log(data);
-  const movies = data.results;
-  movies.forEach((movie) => {
-    console.log(movie.title);
-    console.log(movie.overview);
-    console.log(movie.id);
+  await Promise.all([
+    fetch(`https://api.themoviedb.org/3/movie/popular?api_key=${keyAPI}`)
+      .then((response) => response.json())
+      .then((data) => data.results),
+    fetch(`https://api.themoviedb.org/3/tv/airing_today?api_key=${keyAPI}`)
+      .then((response) => response.json())
+      .then((data) => data.results),
+  ])
+    .then(([movies, series]) => {
+      const contents = [...movies, ...series];
+      const linkContainer = document.querySelector("#linkContainer");
+      const ul = document.createElement("ul");
+      linkContainer.appendChild(ul);
 
-    const container = document.getElementById("dataAPI");
-    const element = document.createElement("div");
-    const pageDetails = "./pages/details.html";
-    //element.innerHTML = `<a href="${movie.url} ?id" target="_blank">${movie.title} ${movie.id}</a>`;
-    element.innerHTML = `<a href="${pageDetails}?id=${movie.id}">${movie.title} : ${movie.id}</a>`;
+      contents.forEach((content) => {
+        const li = document.createElement("li");
+        ul.appendChild(li);
 
-    container.appendChild(element);
-
-    //localStorage.setItem("movieData", JSON.stringify(data)); //permet de mettre les données dans le locol storage
-  });
+        const a = document.createElement("a");
+        a.href = `pages/details.html?id=${content.id}&type=${content.title ? "movie" : "tv"}`;
+        a.innerText = content.title || content.name;
+        li.appendChild(a);
+      });
+    })
+    .catch((error) => console.error(error));
 }
 fetchData();
