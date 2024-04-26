@@ -47,12 +47,10 @@ fetchPicture();
 // cette fonction permet de récupérer toutes les informations du films et des les imprimer dans la console
 async function fetchData() {
   const response = await fetch(
-    `https://api.themoviedb.org/3/movie/${id.toString()}?api_key=${keyAPI}` //toString change l'apparence dans de l'impression dans la console
+    `https://api.themoviedb.org/3/movie/${id.toString()}?api_key=${keyAPI}&language=fr-FR` //toString change l'apparence dans de l'impression dans la console
   );
-  const data = await response.json();
-  //console.log(data); --> permet de print les données dans la console
-  //console.log("les infos du films id :" + id + " sont : " + JSON.stringify(data)); --> proposé par J.
-  console.log(`Les infos du film ${id} sont : `, data); // --> permet de farie apparaitre les infos dans la même ligne comme A. m'a montré
+  let data = await response.json();
+  console.log(`Les infos du film ${id} sont : `, data); // --> permet de faire apparaitre les infos dans la même ligne comme A. m'a montré
 
   //crée les éléments dans la page web
   const poster = document.createElement("img");
@@ -96,18 +94,12 @@ async function fetchData() {
   origin_country.classList.add();
   language.appendChild(origin_country);
 
-  // Créer un tableau pour stocker les noms des genres
   const product_country = [];
-  // Boucle à travers chaque élément du tableau genres
   data.production_countries.forEach(function (producountryItem) {
-    // Ajouter le nom du genre actuel au tableau
     product_country.push(producountryItem.name);
   });
-  // Créer un paragraphe pour afficher les noms des genres
   const production_country = document.createElement("p");
-  // Définir le texte du paragraphe en joignant les noms des genres avec des virgules
   production_country.innerText = "Pays de production: " + product_country.join(", ");
-  // Ajouter le paragraphe à l'élément parent (info dans votre cas)
   language.appendChild(production_country);
 
   const overview = document.createElement("p");
@@ -141,58 +133,39 @@ async function fetchData() {
   const production_companies = document.createElement("p");
   production_companies.innerText = "Producteur : " + product_companies.join(", ");
   language.appendChild(production_companies);
-
-  //   const logoComp = [];
-  //   console.log(logoComp);
-  //   data.production_companies.forEach(function (producompaniesItem) {
-  //     logoComp.push(producompaniesItem.logo_path);
-  //   });
-  //   const companiesLogo = document.createElement("img");
-  //   companiesLogo.src = "https://image.tmdb.org/t/p/w300" + data.logo_path;
-  //   companiesLogo.classList.add("rounded", "shadow-lg", "border", "border-light");
-  //   companies.appendChild(companiesLogo);
 }
 fetchData();
 
 async function fetchCast() {
   const response = await fetch(
     `https://api.themoviedb.org/3/movie/${id}/credits?api_key=${keyAPI}`
-  ); //il manquait le s a credit pour que le lien marche
+  );
   const data = await response.json();
-  console.log("le cast du film " + id + " est : ", data); // --> permet de farie apparaitre les infos dans la même ligne comme A. m'a montré
-
+  console.log("le cast du film " + id + " est : ", data);
   //crée les éléments dans la page web
   const picAc = [];
   data.cast.forEach(function (imgAc) {
     picAc.push(imgAc.profile_path);
   });
 
-  // Itérer sur chaque chemin d'accès à l'image dans le tableau picAc
   picAc.forEach(function (imagePath, index) {
-    // Créer un élément div pour représenter une carte
     const card = document.createElement("div");
-    card.classList.add("card", "m-3", "w-25"); // Ajouter la classe "card" pour la mise en forme
+    card.classList.add("card", "m-3", "w-25");
 
-    // Créer un élément img pour afficher l'image
     const actorPicture = document.createElement("img");
-    actorPicture.src = "https://image.tmdb.org/t/p/w200" + imagePath; // Utiliser le chemin d'accès à l'image actuelle
-    actorPicture.classList.add("card-img-top"); // Ajouter la classe "card-img-top" pour la mise en forme de l'image
+    actorPicture.src = "https://image.tmdb.org/t/p/w200" + imagePath;
+    actorPicture.classList.add("card-img-top");
 
-    // Ajouter l'image à la carte
     card.appendChild(actorPicture);
 
-    // Récupérer le nom de l'acteur correspondant à l'index actuel dans data.cast
     const actorName = data.cast[index].name;
 
-    // Créer un élément p pour afficher le nom de l'acteur
     const actorNameParagraph = document.createElement("p");
     actorNameParagraph.textContent = actorName;
     actorNameParagraph.classList.add("text-center");
 
-    // Ajouter le nom de l'acteur à la carte
     card.appendChild(actorNameParagraph);
 
-    // Ajouter la carte à l'élément avec l'ID "cast" (ou un autre conteneur de votre choix)
     cast.appendChild(card);
   });
 }
@@ -238,6 +211,16 @@ async function fetchMovieSimilar() {
 }
 fetchMovieSimilar();
 
+// /**
+//  *
+//  * @param {string[]} array
+//  */
+// function show(array) {
+//   array.forEach((el) => console.log(el));
+// }
+
+// show(["Connard", "CannardWC", "Moi", "Enzo", "Tamère"]);
+
 async function fetchReview() {
   const response = await fetch(
     `https://api.themoviedb.org/3/movie/${id}/reviews?api_key=${keyAPI}`
@@ -258,7 +241,7 @@ async function fetchReview() {
     const userName = author.username;
     const userNameParagraph = document.createElement("p");
     userNameParagraph.textContent = userName;
-    userNameParagraph.classList.add("text-center", "p-3", "bg-warning-subtle", "rounded","fs-4");
+    userNameParagraph.classList.add("text-center", "p-3", "bg-warning-subtle", "rounded", "fs-4");
 
     const commentParagraph = document.createElement("p");
     commentParagraph.textContent = data.results[index].content;
@@ -281,8 +264,14 @@ const boutonPost = document.getElementById("btnPost");
 const textGet = document.getElementById("commentary");
 const nameUserGet = document.getElementById("user");
 
+// Vérifie s'il existe déjà des commentaires dans le localStorage
+let commentaires = JSON.parse(localStorage.getItem("commentaires")) || [];
+
 boutonPost.addEventListener("click", function () {
   const text = textGet.value;
+  commentaires.push(text); // Ajoute le nouveau commentaire au tableau
+  localStorage.setItem("commentaires", JSON.stringify(commentaires)); // Stocke le tableau de commentaires dans le localStorage
+
   const pseudo = user.value;
   console.log(pseudo);
 
@@ -291,7 +280,7 @@ boutonPost.addEventListener("click", function () {
 
   const nameUser = document.createElement("p");
   nameUser.innerHTML = pseudo;
-  nameUser.classList.add("text-center","mb-3","p-3","bg-warning-subtle", "rounded");
+  nameUser.classList.add("text-center", "mb-3", "p-3", "bg-warning-subtle", "rounded");
   card.appendChild(nameUser);
 
   const postCommit = document.createElement("div");
@@ -307,6 +296,7 @@ boutonPost.addEventListener("click", function () {
   letCommitGet.appendChild(card);
 
   btnDelCommit.addEventListener("click", function () {
+    localStorage.removeItem("commentaires"); // pour remove il faut mettre uniquement la clé, pas la valeur
     card.remove();
   });
 });
