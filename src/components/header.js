@@ -1,4 +1,35 @@
-import { getMoviesAndSeriesAutocompletion } from './header-scripts.js';
+import { getMoviesAndSeriesAutocompletion } from '../../assets/scripts/main.js';
+
+// création de la barre de navigation
+const nav = document.createElement('nav');
+nav.innerHTML = `
+    <div class="d-flex">
+        <a class="nav-item m-2 ms-5 hover-style" href="../testrecupdata.html">HOME</a>
+        <a class="nav-item m-2 hover-style" href="../pages/films.html">FILMS</a>
+        <a class="nav-item m-2 hover-style" href="../pages/series.html">SERIES</a> 
+        <a class="nav-item m-2 hover-style" href="../pages/favoris.html">FAVORIS</a>
+    </div>
+    <div class="m-2 me-5">
+        <div class="input-group">
+          <input type="text" id="searchBar" list="autoCompletionList" placeholder="Rechercher" />
+          <button type="button" id="btnSearch">O</button>
+          <datalist id="autoCompletionList"></datalist>
+        </div>
+    </div>
+`;
+//stylisation rapide
+nav.classList.add(
+  'navbar',
+  'bg-color',
+  'sticky-top',
+  'justify-content-between',
+  'align-item-center'
+);
+document.body.appendChild(nav);
+
+// Insérer la barre de navigation juste avant le premier élément du corps de la page
+const firstElement = document.body.firstChild;
+document.body.insertBefore(nav, firstElement);
 
 const searchBar = document.querySelector('#searchBar');
 const btnSearch = document.querySelector('#btnSearch');

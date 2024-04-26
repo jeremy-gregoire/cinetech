@@ -1,4 +1,8 @@
-import { getPopularMovies, getCarouselSelections, getPopularSeries } from './jeremy-script.js';
+import {
+  getPopularMovies,
+  getCarouselSelections,
+  getPopularSeries,
+} from '../../assets/scripts/main.js';
 
 // Elements of the home page
 const moviesCardContainer = document.querySelector('#moviesCardContainer');

@@ -4,16 +4,22 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="shortcut icon" href="#" type="image/x-icon" />
-    <title>Test</title>
+    <title>Cinetech</title>
 
     <!-- BOOTSTRAP -->
-    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css" />
-    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="assets/styles/bootstrap.min.css" />
+    <script type="module" src="assets/scripts/bootstrap.min.js"></script>
 
-    <!-- JAVASCRIPT -->
-    <script type="module" src="jeremy.js" defer></script>
+    <!-- APPLICATION -->
+    <link rel="stylesheet" href="assets/styles/styles.css" />
+    <script type="module" src="assets/scripts/main.js"></script>
+    <script type="module" src="src/scripts/home.js"></script>
   </head>
-  <body class="bg-dark">
+  <body>
+    <!-- HEADER OF THE PAGE -->
+    <script type="module" src="src/components/header.js"></script>
+
+    <!-- MAIN CONTENT OF THE PAGE -->
     <main class="container py-4 d-flex flex-column gap-5">
       <div>
         <h5 class="text-white fs-3">Nouveautés</h5>
@@ -49,5 +55,8 @@
         <div class="d-flex overflow-x-auto gap-3" id="seriesCardContainer"></div>
       </section>
     </main>
+
+    <!-- FOOTER OF THE PAGE -->
+    <script src="src/components/footer.js"></script>
   </body>
 </html>
