@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="#" type="image/x-icon" />
+    <title>Test</title>
+
+    <!-- BOOTSTRAP -->
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css" />
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+
+    <!-- JAVASCRIPT -->
+    <script type="module" src="jeremy.js" defer></script>
+  </head>
+  <body class="bg-dark">
+    <main class="container py-4 d-flex flex-column gap-5">
+      <div>
+        <h5 class="text-white fs-3">Nouveautés</h5>
+        <div id="mostPopularMovies" class="carousel slide" data-bs-ride="carousel">
+          <div class="carousel-indicators" id="btnSlidesContainer"></div>
+          <div class="carousel-inner" id="slidesContainer"></div>
+          <button
+            class="carousel-control-prev"
+            type="button"
+            data-bs-target="#mostPopularMovies"
+            data-bs-slide="prev"
+          >
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button
+            class="carousel-control-next"
+            type="button"
+            data-bs-target="#mostPopularMovies"
+            data-bs-slide="next"
+          >
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+        </div>
+      </div>
+      <section>
+        <h5 class="text-white fs-3">Les films les plus populaires</h5>
+        <div class="d-flex overflow-x-auto gap-3" id="moviesCardContainer"></div>
+      </section>
+      <section>
+        <h5 class="text-white fs-3">Les séries les plus populaires</h5>
+        <div class="d-flex overflow-x-auto gap-3" id="seriesCardContainer"></div>
+      </section>
+    </main>
+  </body>
+</html>
