@@ -1,9 +1,9 @@
 console.log('fetch test');
 
-// Clé API
+// API Key
 const keyAPI = '8c4b867188ee47a1d4e40854b27391ec';
 
-// URL de base pour récupérer la configuration
+// URL for fetching configuration
 const configURL = `https://api.themoviedb.org/3/configuration?api_key=${keyAPI}`;
 
 const options = {
@@ -13,84 +13,77 @@ const options = {
   },
 };
 
+let currentPageSet = 1; // Track the current set of pages being displayed
+
 async function fetchConfig() {
   try {
-    // Requête Fetch API pour obtenir la configuration
+    // Fetch API request to get configuration
     const response = await fetch(configURL, options);
-
-    // Convertir la réponse en JSON
     const data = await response.json();
-
-    // Chemin d'accès de base pour les images
     const baseImageURL = data.images.base_url;
-
-    // Taille de l'image que vous souhaitez afficher (par exemple, 'w500')
     const imageSize = 'w500';
-
-    // URL de la liste des films populaires
     const filmURL = `https://api.themoviedb.org/3/trending/movie/day?api_key=${keyAPI}`;
-
-    // Requête Fetch API pour récupérer les films populaires
     const filmResponse = await fetch(filmURL, options);
-
-    // Convertir la réponse en JSON
     const filmData = await filmResponse.json();
 
-    // Sélectionner l'élément où vous souhaitez afficher les données
-    const dataContainer = document.getElementById('dataContainer');
+    // Calculate pagination
+    const itemsPerPage = 10; // Change this number to adjust the number of films per page
+    const totalPages = Math.ceil(filmData.total_results / itemsPerPage);
 
-    // Créer une structure HTML pour afficher les données
-    let htmlString = '';
+    // Display films for the first page
+    displayFilms(
+      filmData.results.slice(0, itemsPerPage),
+      baseImageURL,
+      imageSize
+    );
 
-    // Parcourir les résultats et les ajouter à la structure HTML
-    filmData.results.forEach((film) => {
-      // Chemin complet de l'image de la série
-      const imageURL = `${baseImageURL}${imageSize}${
-        film.poster_path || film.backdrop_path
-      }`;
-      const filmDetailsURL = `https://api.themoviedb.org/3/movie/${film.id}?api_key=${keyAPI}`;
-
-      htmlString += `
-        <div class="film-item">
-          <a href="#" class="film-link" data-filmId="${film.id}">
-            <img src="${imageURL}" alt="${film.title}">
-            <p><strong>Titre:</strong> ${film.title}</p>
-          </a>
-          <button class="toggle-button">Synopsis</button>
-          <p class="synopsis" style="display: none;"><strong>Synopsis:</strong> ${film.overview}</p>
-        </div>
-      `;
-    });
-    filmData.results.forEach((film) => {
-      console.log(film);
-      // code pour générer la structure HTML
-    });
-    // Ajouter la structure HTML à l'élément dataContainer
-    dataContainer.innerHTML = htmlString;
-
-    // Call the function to attach button events
-    attachButtonEvents();
-
-    // Call the function to attach film link events
-    attachfilmLinkEvents();
-
-    console.log(filmData.results);
+    // Generate pagination links
+    generatePagination(totalPages);
   } catch (error) {
-    // Gérer les erreurs
-    console.error('Une erreur est survenue :', error.message);
+    console.error('An error occurred:', error.message);
   }
+}
+
+function displayFilms(films, baseImageURL, imageSize) {
+  const dataContainer = document.getElementById('dataContainer');
+  let htmlString = '';
+
+  films.forEach((film) => {
+    const imageURL = `${baseImageURL}${imageSize}${
+      film.poster_path || film.backdrop_path
+    }`;
+
+    htmlString += `
+      <div class="film-item">
+        <a href="#" class="film-link" data-filmId="${film.id}">
+          <img src="${imageURL}" alt="${film.title}">
+          <p>${film.title}</p>
+        </a>
+        <button class="toggle-button">Synopsis</button>
+        <p class="synopsis" style="display: none;"> ${film.overview}</p>
+      </div>
+    `;
+  });
+
+  dataContainer.innerHTML = htmlString;
+
+  // Call the function to attach button events
+  attachButtonEvents();
+
+  // Call the function to attach film link events
+  attachFilmLinkEvents();
 }
 
 function attachButtonEvents() {
   const toggleButtons = document.querySelectorAll('.toggle-button');
 
   toggleButtons.forEach((button) => {
-    const synopsis = button.nextElementSibling; // Sélectionne le synopsis suivant le bouton
+    const synopsis = button.nextElementSibling;
 
     button.addEventListener('click', () => {
       if (synopsis.style.display === 'none') {
         synopsis.style.display = 'block';
-        button.textContent = 'Réduire';
+        button.textContent = 'Reduce';
       } else {
         synopsis.style.display = 'none';
         button.textContent = 'Synopsis';
@@ -99,7 +92,7 @@ function attachButtonEvents() {
   });
 }
 
-function attachfilmLinkEvents() {
+function attachFilmLinkEvents() {
   const filmLinks = document.querySelectorAll('.film-link');
 
   filmLinks.forEach((link) => {
@@ -107,19 +100,19 @@ function attachfilmLinkEvents() {
       event.preventDefault();
       const filmId = link.dataset.filmId;
       const filmDetailsURL = `https://api.themoviedb.org/3/movie/${filmId}?api_key=${keyAPI}`;
-      fetchfilmDetails(filmDetailsURL);
+      fetchFilmDetails(filmDetailsURL);
     });
   });
 }
 
-async function fetchfilmDetails(url) {
+async function fetchFilmDetails(url) {
   try {
     const response = await fetch(url);
     const data = await response.json();
     openInNewTab(JSON.stringify(data, null, 2));
   } catch (error) {
     console.error(
-      'Une erreur est survenue lors de la récupération des détails de la série :',
+      'An error occurred while fetching film details:',
       error.message
     );
   }
@@ -128,6 +121,152 @@ async function fetchfilmDetails(url) {
 function openInNewTab(content) {
   const newWindow = window.open('', '_blank');
   newWindow.document.write('<pre>' + content + '</pre>');
+}
+
+function generatePagination(totalPages) {
+  const paginationContainer = document.getElementById('paginationContainer');
+  let paginationHTML = '';
+  const itemsPerPage = 10; // Number of items per page
+  const itemsPerPageSet = 29; // Number of pages per set
+
+  // Calculate the current page set
+  const currentPage = (currentPageSet - 1) * itemsPerPageSet + 1;
+
+  // Calculate the start and end page numbers for the current set
+  let endPage = currentPage + itemsPerPageSet - 1;
+  if (endPage > totalPages) {
+    endPage = totalPages;
+  }
+
+  for (let i = currentPage; i <= endPage; i++) {
+    paginationHTML += `<li class="page-item"><a class="page-link" href="#" data-page="${i}">${i}</a></li>`;
+  }
+
+  paginationContainer.innerHTML = paginationHTML;
+
+  // Add a button to navigate to the next set of pages
+  let paginationControls = document.getElementById('paginationControls');
+  if (!paginationControls) {
+    paginationControls = document.createElement('div');
+    paginationControls.id = 'paginationControls';
+    paginationContainer.parentNode.appendChild(paginationControls);
+  }
+  paginationControls.innerHTML = '';
+
+  if (endPage < totalPages) {
+    const nextSetPage = endPage + 1;
+    paginationControls.innerHTML += `<button class="btn btn-primary" id="nextSetBtn" data-page="${nextSetPage}">Next 29</button>`;
+    const nextSetBtn = document.getElementById('nextSetBtn');
+    nextSetBtn.addEventListener('click', () => {
+      currentPageSet++;
+      generatePagination(totalPages);
+    });
+  }
+
+  // Attach event handlers to pagination links
+  const pageLinks = document.querySelectorAll('.page-link');
+  pageLinks.forEach((link) => {
+    link.addEventListener('click', (event) => {
+      event.preventDefault();
+      const pageNumber = parseInt(link.dataset.page);
+      fetchFilmsForPage(pageNumber);
+    });
+  });
+}
+
+async function fetchFilmsForPage(pageNumber) {
+  try {
+    // Construct the URL for fetching trending movies for the specified page number
+    const filmURL = `https://api.themoviedb.org/3/trending/movie/day?api_key=${keyAPI}&page=${pageNumber}`;
+
+    // Send a GET request to the Movie Database API
+    const response = await fetch(filmURL, options);
+
+    // Parse the JSON data from the response body
+    const data = await response.json();
+
+    // Check if the 'results' property exists in the data object and if it's not empty
+    if (data && data.results) {
+      // Define the base image URL using a hardcoded value
+      const baseImageURL = 'https://image.tmdb.org/t/p/';
+
+      // Set the image size to 'w500'
+      const imageSize = 'w500';
+
+      // Display films for the specified page
+      displayFilms(data.results, baseImageURL, imageSize);
+    } else {
+      // Log an error message if no movie data is found
+      console.error('Results not found in the film data.');
+    }
+  } catch (error) {
+    // Handle any errors that occur during the fetch operation
+    console.error(
+      'An error occurred while fetching films for page:',
+      error.message
+    );
+  }
+}
+function generatePagination(totalPages) {
+  const paginationContainer = document.getElementById('paginationContainer');
+  let paginationHTML = '';
+  const itemsPerPage = 10; // Number of items per page
+  const itemsPerPageSet = 29; // Number of pages per set
+
+  // Calculate the current page set
+  const currentPage = (currentPageSet - 1) * itemsPerPageSet + 1;
+
+  // Calculate the start and end page numbers for the current set
+  let endPage = currentPage + itemsPerPageSet - 1;
+  if (endPage > totalPages) {
+    endPage = totalPages;
+  }
+
+  for (let i = currentPage; i <= endPage; i++) {
+    paginationHTML += `<li class="page-item"><a class="page-link" href="#" data-page="${i}">${i}</a></li>`;
+  }
+
+  paginationContainer.innerHTML = paginationHTML;
+
+  // Add buttons for navigating to the previous and next sets of pages
+  let paginationControls = document.getElementById('paginationControls');
+  if (!paginationControls) {
+    paginationControls = document.createElement('div');
+    paginationControls.id = 'paginationControls';
+    paginationContainer.parentNode.appendChild(paginationControls);
+  }
+  paginationControls.innerHTML = '';
+
+  if (currentPageSet > 1) {
+    const prevSetPage = Math.max((currentPageSet - 2) * itemsPerPageSet + 1, 1);
+    console.log('Previous 29 button clicked. Previous set page:', prevSetPage);
+    paginationControls.innerHTML += `<button class="btn btn-primary" id="prevSetBtn" data-page="${prevSetPage}">Previous 29</button>`;
+    const prevSetBtn = document.getElementById('prevSetBtn');
+    prevSetBtn.addEventListener('click', () => {
+      currentPageSet--;
+      generatePagination(totalPages);
+    });
+  }
+
+  if (endPage < totalPages) {
+    const nextSetPage = endPage + 1;
+    paginationControls.innerHTML += `<button class="btn btn-primary" id="nextSetBtn" data-page="${nextSetPage}">Next 29</button>`;
+    const nextSetBtn = document.getElementById('nextSetBtn');
+    nextSetBtn.addEventListener('click', () => {
+      currentPageSet++;
+      generatePagination(totalPages);
+    });
+  }
+
+  // Attach event handlers to pagination links
+  const pageLinks = document.querySelectorAll('.page-link');
+  pageLinks.forEach((link) => {
+    link.addEventListener('click', (event) => {
+      event.preventDefault();
+      const pageNumber = parseInt(link.dataset.page);
+      fetchFilmsForPage(pageNumber);
+    });
+  });
 }
 
 document.addEventListener('DOMContentLoaded', () => {

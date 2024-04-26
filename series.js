@@ -1,9 +1,11 @@
+let currentPageSet = 1; // Track the current set of pages being displayed
+
 console.log('fetch test');
 
-// Clé API
+// API Key
 const keyAPI = '8c4b867188ee47a1d4e40854b27391ec';
 
-// URL de base pour récupérer la configuration
+// URL for fetching configuration
 const configURL = `https://api.themoviedb.org/3/configuration?api_key=${keyAPI}`;
 
 const options = {
@@ -15,76 +17,73 @@ const options = {
 
 async function fetchConfig() {
   try {
-    // Requête Fetch API pour obtenir la configuration
+    // Fetch API request to get configuration
     const response = await fetch(configURL, options);
-
-    // Convertir la réponse en JSON
     const data = await response.json();
-
-    // Chemin d'accès de base pour les images
     const baseImageURL = data.images.base_url;
-
-    // Taille de l'image que vous souhaitez afficher (par exemple, 'w500')
     const imageSize = 'w500';
-
-    // URL de la liste des séries populaires
     const seriesURL = `https://api.themoviedb.org/3/tv/popular?api_key=${keyAPI}`;
-
-    // Requête Fetch API pour récupérer les séries populaires
     const seriesResponse = await fetch(seriesURL, options);
-
-    // Convertir la réponse en JSON
     const seriesData = await seriesResponse.json();
 
-    // Sélectionner l'élément où vous souhaitez afficher les données
-    const dataContainer = document.getElementById('dataContainer');
+    // Calculate pagination
+    const itemsPerPage = 10; // Change this number to adjust the number of series per page
+    const totalPages = Math.ceil(seriesData.total_results / itemsPerPage);
 
-    // Créer une structure HTML pour afficher les données
-    let htmlString = '';
+    // Display series for the first page
+    displaySeries(
+      seriesData.results.slice(0, itemsPerPage),
+      baseImageURL,
+      imageSize
+    );
 
-    // Parcourir les résultats et les ajouter à la structure HTML
-    seriesData.results.forEach((series) => {
-      // Chemin complet de l'image de la série
-      const imageURL = `${baseImageURL}${imageSize}${series.poster_path}`;
-      const seriesDetailsURL = `https://api.themoviedb.org/3/tv/${series.id}?api_key=${keyAPI}`;
-
-      htmlString += `
-        <div class="series-item">
-          <a href="#" class="series-link" data-series-id="${series.id}">
-            <img src="${imageURL}" alt="${series.name}">
-            <p><strong>Titre:</strong> ${series.name}</p>
-          </a>
-          <button class="toggle-button">Synopsis</button>
-          <p class="synopsis" style="display: none;"><strong>Synopsis:</strong> ${series.overview}</p>
-        </div>
-      `;
-    });
-    // Ajouter la structure HTML à l'élément dataContainer
-    dataContainer.innerHTML = htmlString;
-
-    // Call the function to attach button events
-    attachButtonEvents();
-
-    // Call the function to attach series link events
-    attachSeriesLinkEvents();
+    // Generate pagination links
+    generatePagination(totalPages);
 
     console.log(seriesData.results);
   } catch (error) {
-    // Gérer les erreurs
-    console.error('Une erreur est survenue :', error.message);
+    console.error('An error occurred:', error.message);
   }
+}
+
+function displaySeries(series, baseImageURL, imageSize) {
+  const dataContainer = document.getElementById('dataContainer');
+  let htmlString = '';
+
+  series.forEach((seriesItem) => {
+    const imageURL = `${baseImageURL}${imageSize}${seriesItem.poster_path}`;
+
+    htmlString += `
+      <div class="series-item">
+        <a href="#" class="series-link" data-series-id="${seriesItem.id}">
+          <img src="${imageURL}" alt="${seriesItem.name}">
+          <p> ${seriesItem.name}</p>
+        </a>
+        <button class="toggle-button">Synopsis</button>
+        <p class="synopsis" style="display: none;"> ${seriesItem.overview}</p>
+      </div>
+    `;
+  });
+
+  dataContainer.innerHTML = htmlString;
+
+  // Call the function to attach button events
+  attachButtonEvents();
+
+  // Call the function to attach series link events
+  attachSeriesLinkEvents();
 }
 
 function attachButtonEvents() {
   const toggleButtons = document.querySelectorAll('.toggle-button');
 
   toggleButtons.forEach((button) => {
-    const synopsis = button.nextElementSibling; // Sélectionne le synopsis suivant le bouton
+    const synopsis = button.nextElementSibling;
 
     button.addEventListener('click', () => {
       if (synopsis.style.display === 'none') {
         synopsis.style.display = 'block';
-        button.textContent = 'Réduire';
+        button.textContent = 'Reduce';
       } else {
         synopsis.style.display = 'none';
         button.textContent = 'Synopsis';
@@ -113,7 +112,7 @@ async function fetchSeriesDetails(url) {
     openInNewTab(JSON.stringify(data, null, 2));
   } catch (error) {
     console.error(
-      'Une erreur est survenue lors de la récupération des détails de la série :',
+      'An error occurred while fetching series details:',
       error.message
     );
   }
@@ -122,6 +121,113 @@ async function fetchSeriesDetails(url) {
 function openInNewTab(content) {
   const newWindow = window.open('', '_blank');
   newWindow.document.write('<pre>' + content + '</pre>');
+}
+
+function generatePagination(totalPages) {
+  const paginationContainer = document.getElementById('paginationContainer');
+  let paginationHTML = '';
+
+  for (let i = 1; i <= totalPages; i++) {
+    paginationHTML += `<li class="page-item"><a class="page-link" href="#" data-page="${i}">${i}</a></li>`;
+  }
+
+  paginationContainer.innerHTML = paginationHTML;
+
+  // Attach event handlers to pagination links
+  const pageLinks = document.querySelectorAll('.page-link');
+  pageLinks.forEach((link) => {
+    link.addEventListener('click', (event) => {
+      event.preventDefault();
+      const pageNumber = parseInt(link.dataset.page);
+      fetchSeriesForPage(pageNumber);
+    });
+  });
+}
+
+async function fetchSeriesForPage(pageNumber) {
+  try {
+    const seriesURL = `https://api.themoviedb.org/3/tv/popular?api_key=${keyAPI}&page=${pageNumber}`;
+    const response = await fetch(seriesURL, options);
+    const data = await response.json();
+
+    // Check if the 'images' property exists in the data object
+    if (data.images && data.images.base_url) {
+      const baseImageURL = data.images.base_url;
+      const imageSize = 'w500';
+
+      // Display series for the specified page
+      displaySeries(data.results, baseImageURL, imageSize);
+    } else {
+      console.error('Base image URL not found in the series data.');
+    }
+  } catch (error) {
+    console.error(
+      'An error occurred while fetching series for page:',
+      error.message
+    );
+  }
+}
+
+function generatePagination(totalPages) {
+  const paginationContainer = document.getElementById('paginationContainer');
+  let paginationHTML = '';
+  const itemsPerPage = 10; // Number of items per page
+  const itemsPerPageSet = 29; // Number of pages per set
+
+  // Calculate the current page set
+  const currentPage = (currentPageSet - 1) * itemsPerPageSet + 1;
+
+  // Calculate the start and end page numbers for the current set
+  let endPage = currentPage + itemsPerPageSet - 1;
+  if (endPage > totalPages) {
+    endPage = totalPages;
+  }
+
+  for (let i = currentPage; i <= endPage; i++) {
+    paginationHTML += `<li class="page-item"><a class="page-link" href="#" data-page="${i}">${i}</a></li>`;
+  }
+
+  paginationContainer.innerHTML = paginationHTML;
+
+  // Add buttons for navigating to the previous and next sets of pages
+  let paginationControls = document.getElementById('paginationControls');
+  if (!paginationControls) {
+    paginationControls = document.createElement('div');
+    paginationControls.id = 'paginationControls';
+    paginationContainer.parentNode.appendChild(paginationControls);
+  }
+  paginationControls.innerHTML = '';
+
+  if (currentPageSet > 1) {
+    const prevSetPage = Math.max((currentPageSet - 2) * itemsPerPageSet + 1, 1);
+    console.log('Previous 29 button clicked. Previous set page:', prevSetPage);
+    paginationControls.innerHTML += `<button class="btn btn-primary" id="prevSetBtn" data-page="${prevSetPage}">Previous 29</button>`;
+    const prevSetBtn = document.getElementById('prevSetBtn');
+    prevSetBtn.addEventListener('click', () => {
+      currentPageSet--;
+      generatePagination(totalPages);
+    });
+  }
+
+  if (endPage < totalPages) {
+    const nextSetPage = endPage + 1;
+    paginationControls.innerHTML += `<button class="btn btn-primary" id="nextSetBtn" data-page="${nextSetPage}">Next 29</button>`;
+    const nextSetBtn = document.getElementById('nextSetBtn');
+    nextSetBtn.addEventListener('click', () => {
+      currentPageSet++;
+      generatePagination(totalPages);
+    });
+  }
+
+  // Attach event handlers to pagination links
+  const pageLinks = document.querySelectorAll('.page-link');
+  pageLinks.forEach((link) => {
+    link.addEventListener('click', (event) => {
+      event.preventDefault();
+      const pageNumber = parseInt(link.dataset.page);
+      fetchSeriesForPage(pageNumber);
+    });
+  });
 }
 
 document.addEventListener('DOMContentLoaded', () => {

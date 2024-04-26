@@ -4,10 +4,61 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="enzo.css" />
+    <link rel="stylesheet" href="bootstrap/bootstrap.min.css" />
+    <link
+      rel="stylesheet"
+      href="bootstrap/bootstrap.min.css"
+      media="screen and (min-width: 576px)"
+    />
+    <link
+      rel="stylesheet"
+      href="bootstrap/bootstrap.min.css"
+      media="screen and (min-width: 768px)"
+    />
+    <link
+      rel="stylesheet"
+      href="bootstrap/bootstrap.min.css"
+      media="screen and (min-width: 992px)"
+    />
+    <link
+      rel="stylesheet"
+      href="bootstrap/bootstrap.min.css"
+      media="screen and (min-width: 1200px)"
+    />
     <title>SERIES</title>
   </head>
+  <header class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+      <a class="navbar-brand" href="accueil.html">Accueil</a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarNav"
+        aria-controls="navbarNav"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="film.html">Film</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="series.html">Séries</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </header>
   <body>
     <div id="dataContainer" class="series-container"></div>
+    <nav aria-label="Page navigation example">
+      <ul id="paginationContainer" class="pagination"></ul>
+    </nav>
+    <script src="bootstrap/bootstrap.min.js"></script>
     <script src="series.js" defer></script>
   </body>
 </html>
