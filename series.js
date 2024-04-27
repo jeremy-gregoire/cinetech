@@ -1,7 +1,5 @@
 let currentPageSet = 1; // Track the current set of pages being displayed
 
-console.log('fetch test');
-
 // API Key
 const keyAPI = '8c4b867188ee47a1d4e40854b27391ec';
 
@@ -51,16 +49,18 @@ function displaySeries(series, baseImageURL, imageSize) {
   let htmlString = '';
 
   series.forEach((seriesItem) => {
-    const imageURL = `${baseImageURL}${imageSize}${seriesItem.poster_path}`;
+    const imageURL = seriesItem.poster_path
+      ? `${baseImageURL}${imageSize}${seriesItem.poster_path}`
+      : 'https://via.placeholder.com/150'; // Use a placeholder image if no poster path is available
 
     htmlString += `
       <div class="series-item">
         <a href="#" class="series-link" data-series-id="${seriesItem.id}">
           <img src="${imageURL}" alt="${seriesItem.name}">
-          <p> ${seriesItem.name}</p>
+          <p>${seriesItem.name}</p>
         </a>
         <button class="toggle-button">Synopsis</button>
-        <p class="synopsis" style="display: none;"> ${seriesItem.overview}</p>
+        <p class="synopsis" style="display: none;">${seriesItem.overview}</p>
       </div>
     `;
   });
@@ -126,51 +126,6 @@ function openInNewTab(content) {
 function generatePagination(totalPages) {
   const paginationContainer = document.getElementById('paginationContainer');
   let paginationHTML = '';
-
-  for (let i = 1; i <= totalPages; i++) {
-    paginationHTML += `<li class="page-item"><a class="page-link" href="#" data-page="${i}">${i}</a></li>`;
-  }
-
-  paginationContainer.innerHTML = paginationHTML;
-
-  // Attach event handlers to pagination links
-  const pageLinks = document.querySelectorAll('.page-link');
-  pageLinks.forEach((link) => {
-    link.addEventListener('click', (event) => {
-      event.preventDefault();
-      const pageNumber = parseInt(link.dataset.page);
-      fetchSeriesForPage(pageNumber);
-    });
-  });
-}
-
-async function fetchSeriesForPage(pageNumber) {
-  try {
-    const seriesURL = `https://api.themoviedb.org/3/tv/popular?api_key=${keyAPI}&page=${pageNumber}`;
-    const response = await fetch(seriesURL, options);
-    const data = await response.json();
-
-    // Check if the 'images' property exists in the data object
-    if (data.images && data.images.base_url) {
-      const baseImageURL = data.images.base_url;
-      const imageSize = 'w500';
-
-      // Display series for the specified page
-      displaySeries(data.results, baseImageURL, imageSize);
-    } else {
-      console.error('Base image URL not found in the series data.');
-    }
-  } catch (error) {
-    console.error(
-      'An error occurred while fetching series for page:',
-      error.message
-    );
-  }
-}
-
-function generatePagination(totalPages) {
-  const paginationContainer = document.getElementById('paginationContainer');
-  let paginationHTML = '';
   const itemsPerPage = 10; // Number of items per page
   const itemsPerPageSet = 29; // Number of pages per set
 
@@ -228,6 +183,33 @@ function generatePagination(totalPages) {
       fetchSeriesForPage(pageNumber);
     });
   });
+}
+
+async function fetchSeriesForPage(pageNumber) {
+  try {
+    const seriesURL = `https://api.themoviedb.org/3/tv/popular?api_key=${keyAPI}&page=${pageNumber}`;
+    const response = await fetch(seriesURL, options);
+    const data = await response.json();
+
+    // Check if the 'results' property exists in the data object
+    if (data && data.results) {
+      const baseImageURL = 'https://image.tmdb.org/t/p/'; // Hardcoded base image URL
+      const imageSize = 'w500';
+
+      // Update current page set
+      currentPageSet = Math.ceil(pageNumber / 29);
+
+      // Display series for the specified page
+      displaySeries(data.results, baseImageURL, imageSize);
+    } else {
+      console.error('Results not found in the series data.');
+    }
+  } catch (error) {
+    console.error(
+      'An error occurred while fetching series for page:',
+      error.message
+    );
+  }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
