@@ -1,13 +1,22 @@
 import { getMoviesAndSeriesAutocompletion } from '../../assets/scripts/main.js';
 
+console.log('origin:', window.location.origin);
+console.log('pathname:', window.location.pathname);
+
+let pathnameFolders = window.location.pathname.substring(
+  0,
+  window.location.pathname.lastIndexOf('/') + 1
+);
+
+console.log('pathnameFolders:', pathnameFolders);
+
 // création de la barre de navigation
 const nav = document.createElement('nav');
 nav.innerHTML = `
     <div class="d-flex">
-        <a class="nav-item m-2 ms-5 hover-style" href="../testrecupdata.html">HOME</a>
-        <a class="nav-item m-2 hover-style" href="../pages/films.html">FILMS</a>
-        <a class="nav-item m-2 hover-style" href="../pages/series.html">SERIES</a> 
-        <a class="nav-item m-2 hover-style" href="../pages/favoris.html">FAVORIS</a>
+        <a class="nav-item m-2 ms-5 hover-style" href="${window.location.origin}/index.html">ACCUEIL</a>
+        <a class="nav-item m-2 hover-style" href="#">FILMS</a>
+        <a class="nav-item m-2 hover-style" href="#">SERIES</a>
     </div>
     <div class="m-2 me-5">
         <div class="input-group">

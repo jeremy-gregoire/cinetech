@@ -15,7 +15,7 @@ getPopularMovies().then((popularMovies) => {
   popularMovies.forEach((popularMovie) => {
     // Make the item clickable
     const a = document.createElement('a');
-    a.href = `details.html?id=${popularMovie.id}&type=movie`;
+    a.href = `src/pages/details.html?id=${popularMovie.id}&type=movie`;
     moviesCardContainer.appendChild(a);
 
     // Image
@@ -52,7 +52,9 @@ getCarouselSelections().then((selections) => {
 
     // Make this item clickable
     const a = document.createElement('a');
-    a.href = `details.html?id=${selection.id}&type=${selection.release_date ? 'movie' : 'tv'}`;
+    a.href = `src/pages/details.html?id=${selection.id}&type=${
+      selection.release_date ? 'movie' : 'tv'
+    }`;
     carouselItem.appendChild(a);
 
     // Image
@@ -79,7 +81,7 @@ getPopularSeries().then((popularSeries) => {
   popularSeries.forEach((popularSerie) => {
     // Make this item clickable
     const a = document.createElement('a');
-    a.href = `details.html?id=${popularSerie.id}&id=tv`;
+    a.href = `src/pages/details.html?id=${popularSerie.id}&type=tv`;
     seriesCardContainer.appendChild(a);
 
     // Image

@@ -6,12 +6,12 @@ const TheMovieDBAPI = {
 
 const Application = {
   apiURL: `${TheMovieDBAPI.baseURL}/${TheMovieDBAPI.version}`,
-  defaultLanguage: 'fr-FR',
+  language: 'fr-FR',
 };
 
 export async function getMoviesAndSeriesAutocompletion() {
-  let urlMovies = `${Application.apiURL}/movie/popular?language=${Application.defaultLanguage}`;
-  let urlSeries = `${Application.apiURL}/tv/popular?language=${Application.defaultLanguage}`;
+  let urlMovies = `${Application.apiURL}/movie/popular?language=${Application.language}`;
+  let urlSeries = `${Application.apiURL}/tv/popular?language=${Application.language}`;
 
   try {
     const OPTIONS = {
@@ -38,7 +38,7 @@ export async function getMoviesAndSeriesAutocompletion() {
 }
 
 export async function getPopularMovies() {
-  let url = `${Application.apiURL}/movie/popular?language=${Application.defaultLanguage}&page=1`;
+  let url = `${Application.apiURL}/movie/popular?language=${Application.language}&page=1`;
 
   try {
     let response = await fetch(url, {
@@ -62,8 +62,8 @@ export async function getPopularMovies() {
 }
 
 export async function getCarouselSelections() {
-  let urlMovies = `${Application.apiURL}/movie/now_playing?language=${Application.defaultLanguage}&page=1`;
-  let urlSeries = `${Application.apiURL}/tv/on_the_air?language=${Application.defaultLanguage}&page=1`;
+  let urlMovies = `${Application.apiURL}/movie/now_playing?language=${Application.language}&page=1`;
+  let urlSeries = `${Application.apiURL}/tv/on_the_air?language=${Application.language}&page=1`;
 
   try {
     const OPTIONS = {
@@ -96,7 +96,7 @@ export async function getCarouselSelections() {
 }
 
 export async function getPopularSeries() {
-  let url = `${Application.apiURL}/tv/popular?language=${Application.defaultLanguage}&page=1`;
+  let url = `${Application.apiURL}/tv/popular?language=${Application.language}&page=1`;
 
   try {
     let response = await fetch(url, {
@@ -113,6 +113,81 @@ export async function getPopularSeries() {
     }
 
     let data = await response.json();
+    return data.results;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function getInfos(id, type) {
+  let url = `${Application.apiURL}/${type}/${id}?language=${Application.language}`;
+
+  try {
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        accept: 'application/json',
+        Authorization: `Bearer ${TheMovieDBAPI.token}`,
+      },
+    });
+
+    return await response.json();
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function getCast(id, type) {
+  let url = `${Application.apiURL}/${type}/${id}/credits?language=${Application.language}`;
+
+  try {
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        accept: 'application/json',
+        Authorization: `Bearer ${TheMovieDBAPI.token}`,
+      },
+    });
+
+    const data = await response.json();
+    return data.cast;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function getSimilars(id, type) {
+  let url = `${Application.apiURL}/${type}/${id}/similar?language=${Application.language}`;
+
+  try {
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        accept: 'application/json',
+        Authorization: `Bearer ${TheMovieDBAPI.token}`,
+      },
+    });
+
+    const data = await response.json();
+    return data.results;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function getReviews(id, type) {
+  let url = `${Application.apiURL}/${type}/${id}/reviews`;
+
+  try {
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        accept: 'application/json',
+        Authorization: `Bearer ${TheMovieDBAPI.token}`,
+      },
+    });
+
+    const data = await response.json();
     return data.results;
   } catch (error) {
     throw error;

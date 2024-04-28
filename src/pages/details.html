@@ -3,14 +3,22 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="#" type="image/x-icon" />
     <title>Data API</title>
-    <link rel="stylesheet" href="../css/bootstrap.min.css" />
-    <link rel="stylesheet" href="../css/atomique.css" />
-    <script src="../js/bootstrap.min.js" defer></script>
-    <script src="../js/header.js" defer></script>
-    <script src="../js/details.js" defer></script>
+
+    <!-- BOOTSTRAP -->
+    <link rel="stylesheet" href="../../assets/styles/bootstrap.min.css" />
+    <script src="../../assets/scripts/bootstrap.min.js" defer></script>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../assets/styles/styles.css" />
+
+    <!-- JAVASCRIPT -->
+    <script type="module" src="../scripts/details.js" defer></script>
   </head>
   <body>
+    <script type="module" src="../../src/components/header.js"></script>
+
     <main>
       <!-- bandeau est le container parent dans lequel je met un background -->
       <div id="bandeau">
@@ -81,5 +89,7 @@
         </div>
       </div>
     </main>
+
+    <script src="../../src/components/footer.js"></script>
   </body>
 </html>
