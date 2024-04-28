@@ -44,10 +44,11 @@ getInfos(id, type).then((infos) => {
   bandeau.style.backgroundSize = 'cover';
 
   const poster = document.createElement('img');
-  poster.src = `https://image.tmdb.org/t/p/w300${infos.poster_path}`; //pour récupérer l'image correspondant au film
+  poster.src = `https://image.tmdb.org/t/p/w300${infos.poster_path}`;
   poster.classList.add('rounded', 'shadow-lg', 'border', 'border-light');
   affiche.appendChild(poster);
 
+  // info parts
   const title = document.createElement('h1');
   title.innerText = infos.title || infos.name;
   info.appendChild(title);
@@ -61,7 +62,7 @@ getInfos(id, type).then((infos) => {
   info.appendChild(release_date);
 
   const runtime = document.createElement('p');
-  runtime.innerText = `Durée ${type === 'movie' ? 'du film' : 'de la série'} au totale : ${
+  runtime.innerText = `Durée ${type === 'movie' ? 'du film' : 'de la série'} : ${
     infos.runtime
       ? `${infos.runtime}m`
       : infos.episode_run_time.length > 0
@@ -78,9 +79,10 @@ getInfos(id, type).then((infos) => {
   });
 
   const genreParagraph = document.createElement('p');
-  genreParagraph.innerText = 'Genre: ' + genreNames.join(', ');
+  genreParagraph.innerText = 'Genre : ' + genreNames.join(', ');
   info.appendChild(genreParagraph);
 
+  // language parts
   const original_language = document.createElement('p');
   original_language.innerText = 'Langue original : ' + infos.original_language;
   original_language.classList.add('pe-2');
@@ -90,7 +92,17 @@ getInfos(id, type).then((infos) => {
   origin_country.innerText = "Pays d'origine : " + infos.origin_country;
   origin_country.classList.add('px-2');
   language.appendChild(origin_country);
+  
+  const product_companies = [];
+  infos.production_companies.forEach(function (producompaniesItem) {
+    product_companies.push(producompaniesItem.name);
+  });
+  const production_companies = document.createElement('p');
+  production_companies.innerText = 'Producteur : ' + product_companies.join(', ');
+  production_companies.classList.add('px-2');
+  language.appendChild(production_companies);
 
+  // overview part
   const overview = document.createElement('p');
   overview.innerText =
     infos.overview !== ''
@@ -98,6 +110,7 @@ getInfos(id, type).then((infos) => {
       : `Il n'y a pas de description pour ${type === 'movie' ? 'ce film' : 'cette série'} !`;
   pitch.appendChild(overview);
 
+  // stats part
   const stats = document.createElement('p');
   stats.innerHTML = `
     <div class="d-flex justify-content-center">
@@ -106,7 +119,7 @@ getInfos(id, type).then((infos) => {
       <p class="px-4">Moyenne des votes : ${infos.vote_count}</p>
     </div>
   `;
-  stats.classList.add('text-center', 'px-3');
+  stats.classList.add('px-3', 'text-sm-light');
   statistic.appendChild(stats);
 
   const budget = document.createElement('p');
@@ -121,15 +134,6 @@ getInfos(id, type).then((infos) => {
     </div>
   `;
   statistic.appendChild(budget);
-
-  const product_companies = [];
-  infos.production_companies.forEach(function (producompaniesItem) {
-    product_companies.push(producompaniesItem.name);
-  });
-  const production_companies = document.createElement('p');
-  production_companies.innerText = 'Producteur : ' + product_companies.join(', ');
-  production_companies.classList.add('px-2');
-  language.appendChild(production_companies);
 });
 
 getCast(id, type).then((actors) => {
@@ -189,7 +193,7 @@ getSimilars(id, type).then((similars) => {
     poster.src =
       similar.backdrop_path !== null
         ? `https://image.tmdb.org/t/p/w200${similar.backdrop_path}`
-        : `${window.location.origin}/assets/img/user-astronaut-solid.svg`;
+        : `${window.location.origin}/assets/img/person.svg`;
     poster.classList.add('card-img-top');
     card.appendChild(poster);
 
@@ -237,7 +241,7 @@ getReviews(id, type).then((reviews) => {
   } else {
     const p = document.createElement('p');
     p.classList.add('text-center', 'fs-4', 'fw-bold');
-    p.innerText = "Il n'y a pas de commentaire pour ce film !";
+    p.innerText = "Il n'y a pas de commentaires pour ce film !";
     rate.appendChild(p);
   }
 });
