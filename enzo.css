@@ -1,0 +1,154 @@
+/* Media query for screens with a minimum width of 767px */
+@media screen and (min-width: 767px) {
+  /* Styles for series container */
+  .series-container {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr); /* 7 series per column */
+    gap: 20px; /* Spacing between series */
+  }
+
+  /* Styles for each series item */
+  .series-item {
+    padding: 10px;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  /* Styles for series title */
+  .series-item .series-title p {
+    white-space: nowrap;
+  }
+
+  /* Styles for series synopsis */
+  .synopsis {
+    font-size: 14px;
+    line-height: 1.4; /* Increase line spacing if necessary */
+    word-wrap: break-word;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-height: 8.2em; /* Maximum height equivalent to about 3 lines of text */
+  }
+
+  /* Styles for series item image */
+  .series-item img {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+  }
+
+  /* Styles for series info */
+  .series-item .series-info {
+    flex-grow: 1; /* Allow text area to take up all available space */
+  }
+
+  /* Styles for series info paragraphs */
+  .series-item .series-info p {
+    margin: 0; /* Remove default paragraph margins */
+  }
+
+  /* Styles for toggle button */
+  .toggle-button {
+    align-self: flex-end; /* Align button to bottom of container */
+  }
+}
+
+/* Media query for screens with a maximum width of 767px */
+@media screen and (max-width: 767px) {
+  /* Styles for series item image */
+  .series-item img {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+  }
+
+  /* Styles for each series item */
+  .series-item {
+    padding: 10px;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+}
+
+/* Film */
+
+/* Media query for screens with a maximum width of 767px */
+@media screen and (max-width: 767px) {
+  /* Styles for film item */
+  .film-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  /* Styles for film item image */
+  .film-item img {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+  }
+}
+
+/* Media query for screens with a minimum width of 767px */
+@media screen and (min-width: 767px) {
+  /* Styles for film container */
+  .film-container {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr); /* 7 films per column */
+    gap: 20px; /* Spacing between films */
+  }
+
+  /* Styles for each film item */
+  .film-item {
+    padding: 10px;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  /* Styles for film title */
+  .film-item .film-title p {
+    white-space: nowrap;
+  }
+
+  /* Styles for film synopsis */
+  .synopsis {
+    font-size: 14px;
+    line-height: 1.4; /* Increase line spacing if necessary */
+    word-wrap: break-word;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-height: 8.2em; /* Maximum height equivalent to about 3 lines of text */
+  }
+
+  /* Styles for film item image */
+  .film-item img {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+  }
+
+  /* Styles for film info */
+  .film-item .film-info {
+    flex-grow: 1; /* Allow text area to take up all available space */
+  }
+
+  /* Styles for film info paragraphs */
+  .film-item .film-info p {
+    margin: 0; /* Remove default paragraph margins */
+  }
+
+  /* Styles for toggle button */
+  .toggle-button {
+    align-self: flex-end; /* Align button to bottom of container */
+  }
+}
