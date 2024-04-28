@@ -361,7 +361,6 @@ async function fetchCast() {
           });
         })
         .catch((error) => console.error(error));
-
       break;
   }
 }
