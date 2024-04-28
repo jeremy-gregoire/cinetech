@@ -1,7 +1,5 @@
 import { getCast, getInfos, getReviews, getSimilars } from '../../assets/scripts/main.js';
 
-const keyAPI = '8c4b867188ee47a1d4e40854b27391ec';
-
 // ici je récupère l'id dans l'URL
 const params = new URLSearchParams(window.location.search); // on localise le paramètre id dans l'url
 const id = params.get('id'); // on définit id --> on le récupère tel quel dans l'URL
