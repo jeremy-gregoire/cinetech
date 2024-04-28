@@ -61,6 +61,54 @@ export async function getPopularMovies() {
   }
 }
 
+export async function getPopularMoviesByPage(page) {
+  let url = `${Application.apiURL}/movie/popular?language=${Application.language}&page=${page}`;
+
+  try {
+    let response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        accept: 'application/json',
+        Authorization: `Bearer ${TheMovieDBAPI.token}`,
+      },
+    });
+
+    if (!response.ok && response.status !== 200) {
+      console.error('Impossible to get the movies!');
+      return;
+    }
+
+    let data = await response.json();
+    return data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function getPopularSeriesByPage(page) {
+  let url = `${Application.apiURL}/tv/popular?language=${Application.language}&page=${page}`;
+
+  try {
+    let response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        accept: 'application/json',
+        Authorization: `Bearer ${TheMovieDBAPI.token}`,
+      },
+    });
+
+    if (!response.ok && response.status !== 200) {
+      console.error('Impossible to get the movies!');
+      return;
+    }
+
+    let data = await response.json();
+    return data;
+  } catch (error) {
+    throw error;
+  }
+}
+
 export async function getCarouselSelections() {
   let urlMovies = `${Application.apiURL}/movie/now_playing?language=${Application.language}&page=1`;
   let urlSeries = `${Application.apiURL}/tv/on_the_air?language=${Application.language}&page=1`;

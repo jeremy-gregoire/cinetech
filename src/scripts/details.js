@@ -1,6 +1,6 @@
 import { getCast, getInfos, getReviews, getSimilars } from '../../assets/scripts/main.js';
 
-// ici je récupère l'id dans l'URL
+// Gets the id and type parameters of the URL
 const params = new URLSearchParams(window.location.search); // on localise le paramètre id dans l'url
 const id = params.get('id'); // on définit id --> on le récupère tel quel dans l'URL
 const type = params.get('type');
@@ -36,7 +36,7 @@ const suggestions = document.getElementById('suggestion');
 const details = document.getElementById('details');
 const rate = document.getElementById('rate');
 
-// --- fonction qui permet de récupérer les informations
+// Gets all informations of the content
 getInfos(id, type).then((infos) => {
   bandeau.classList.add('fullscreen-img', 'filter');
   bandeau.style.backgroundImage = `url(https://image.tmdb.org/t/p/w500${infos.backdrop_path})`;
@@ -72,18 +72,13 @@ getInfos(id, type).then((infos) => {
   }`;
   info.appendChild(runtime);
 
-  // Créer un tableau pour stocker les noms des genres
   const genreNames = [];
-  // Boucle à travers chaque élément du tableau genres
   infos.genres.forEach(function (genreItem) {
-    // Ajouter le nom du genre actuel au tableau
     genreNames.push(genreItem.name);
   });
-  // Créer un paragraphe pour afficher les noms des genres
+
   const genreParagraph = document.createElement('p');
-  // Définir le texte du paragraphe en joignant les noms des genres avec des virgules
   genreParagraph.innerText = 'Genre: ' + genreNames.join(', ');
-  // Ajouter le paragraphe à l'élément parent (info dans votre cas)
   info.appendChild(genreParagraph);
 
   const original_language = document.createElement('p');
@@ -160,38 +155,36 @@ getCast(id, type).then((actors) => {
   });
 });
 
-// --- fonction qui permet de récupérer de manière random les films similaires
+// Gets a n random elements of an array
 function getRandomElements(arr, n) {
-  // Vérifier si n est valide
   if (n > arr.length) {
     n = arr.length;
     // throw new Error('n must be less or equal to the length of the array !');
   }
 
-  // Créer une copie du tableau d'origine
+  // Creates a copy the original array
   const shuffledArr = [...arr];
 
-  // Mélanger le tableau en utilisant l'algorithme de Fisher-Yates
+  // Mixed the array by using the Fisher-Yates algorithm
   for (let i = shuffledArr.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [shuffledArr[i], shuffledArr[j]] = [shuffledArr[j], shuffledArr[i]];
   }
 
-  // Renvoie les n premiers éléments du tableau mélangé
+  // Returns n first elements of the mixed array
   return shuffledArr.slice(0, n);
 }
 
+// Gets similar content (for exemple: similar movie) of that content and creates cards them.
 getSimilars(id, type).then((similars) => {
   const randomSimilars = getRandomElements(similars, 9);
 
-  //crée les cards dans lesquelles les films vont apparaitre
   randomSimilars.forEach((similar) => {
     const a = document.createElement('a');
     a.href = `details.html?id=${similar.id}&type=${type}`;
     a.classList.add('card', 'm-3', 'w-25');
 
     const card = document.createElement('div');
-    // Crée un élément image pour afficher le poster du film similaire
     const poster = document.createElement('img');
     poster.src =
       similar.backdrop_path !== null
@@ -200,19 +193,18 @@ getSimilars(id, type).then((similars) => {
     poster.classList.add('card-img-top');
     card.appendChild(poster);
 
-    // Crée un élément pour afficher le nom du film similaire
     const nameSimilar = similar.title || similar.name;
     const nameSimilarPath = document.createElement('p');
     nameSimilarPath.textContent = nameSimilar;
     nameSimilarPath.classList.add('text-center');
     card.appendChild(nameSimilarPath);
 
-    // Ajoute la carte à la div "suggestions" dans le HTML
     a.appendChild(card);
     suggestions.appendChild(a);
   });
 });
 
+// Gets the reviews of that content (shows a message if the content doesn't have reviews)
 getReviews(id, type).then((reviews) => {
   if (reviews.length > 0) {
     const commit = [];
@@ -250,19 +242,19 @@ getReviews(id, type).then((reviews) => {
   }
 });
 
-//----- AJOUT ET SUPPRESION DE COMMENTAIRES POUR L'UITLISATEUR
+// Adds and deletes reviews for the user
 const letCommitGet = document.getElementById('letCommitGet');
 const boutonPost = document.getElementById('btnPost');
 const textGet = document.getElementById('commentary');
 const nameUserGet = document.getElementById('user');
 
-// Vérifie s'il existe déjà des commentaires dans le localStorage
+// Checks if reviews already exist in the localStorage
 let commentaires = JSON.parse(localStorage.getItem('commentaires')) || [];
 
 boutonPost.addEventListener('click', function () {
   const text = textGet.value;
-  commentaires.push(text); // Ajoute le nouveau commentaire au tableau
-  localStorage.setItem('commentaires', JSON.stringify(commentaires)); // Stocke le tableau de commentaires dans le localStorage
+  commentaires.push(text);
+  localStorage.setItem('commentaires', JSON.stringify(commentaires));
 
   const pseudo = user.value;
 
@@ -287,7 +279,7 @@ boutonPost.addEventListener('click', function () {
   letCommitGet.appendChild(card);
 
   btnDelCommit.addEventListener('click', function () {
-    localStorage.removeItem('commentaires'); // pour remove il faut mettre uniquement la clé, pas la valeur
+    localStorage.removeItem('commentaires');
     card.remove();
   });
 });

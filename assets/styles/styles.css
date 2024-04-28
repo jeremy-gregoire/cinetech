@@ -66,3 +66,8 @@ body {
 .bg-footer {
   background-color: rgb(255, 195, 128);
 }
+
+.content-galery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(154px, 1fr));
+}

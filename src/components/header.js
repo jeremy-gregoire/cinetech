@@ -1,22 +1,12 @@
 import { getMoviesAndSeriesAutocompletion } from '../../assets/scripts/main.js';
 
-console.log('origin:', window.location.origin);
-console.log('pathname:', window.location.pathname);
-
-let pathnameFolders = window.location.pathname.substring(
-  0,
-  window.location.pathname.lastIndexOf('/') + 1
-);
-
-console.log('pathnameFolders:', pathnameFolders);
-
-// création de la barre de navigation
+// Creates the navbar
 const nav = document.createElement('nav');
 nav.innerHTML = `
     <div class="d-flex">
         <a class="nav-item m-2 ms-5 hover-style" href="${window.location.origin}/index.html">ACCUEIL</a>
-        <a class="nav-item m-2 hover-style" href="#">FILMS</a>
-        <a class="nav-item m-2 hover-style" href="#">SERIES</a>
+        <a class="nav-item m-2 hover-style" href="${window.location.origin}/src/pages/movies.html">FILMS</a>
+        <a class="nav-item m-2 hover-style" href="${window.location.origin}/src/pages/series.html">SÉRIES</a>
     </div>
     <div class="m-2 me-5">
         <div class="input-group">
@@ -26,7 +16,7 @@ nav.innerHTML = `
         </div>
     </div>
 `;
-//stylisation rapide
+
 nav.classList.add(
   'navbar',
   'bg-color',
@@ -36,7 +26,7 @@ nav.classList.add(
 );
 document.body.appendChild(nav);
 
-// Insérer la barre de navigation juste avant le premier élément du corps de la page
+// Inserts the navbar before the first element of the body page
 const firstElement = document.body.firstChild;
 document.body.insertBefore(nav, firstElement);
 
@@ -59,7 +49,7 @@ const goToDetails = () => {
 
   if (selected) {
     let valueParams = selected.getAttribute('request-info').split(':');
-    window.location.href = `${window.location.origin}/details.html?id=${valueParams[1]}&type=${valueParams[0]}`;
+    window.location.href = `${window.location.origin}/src/pages/details.html?id=${valueParams[1]}&type=${valueParams[0]}`;
   } else {
     console.error('Your search is empty or not found!');
     return;
