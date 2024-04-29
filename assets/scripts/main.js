@@ -1,13 +1,12 @@
 const TheMovieDBAPI = {
-  token:
-    "",
-  baseURL: "https://api.themoviedb.org",
-  version: "3",
+  token: '',
+  baseURL: 'https://api.themoviedb.org',
+  version: '3',
 };
 
 const Application = {
   apiURL: `${TheMovieDBAPI.baseURL}/${TheMovieDBAPI.version}`,
-  language: "fr-FR",
+  language: 'fr-FR',
 };
 
 export async function getMoviesAndSeriesAutocompletion() {
@@ -16,16 +15,16 @@ export async function getMoviesAndSeriesAutocompletion() {
 
   try {
     const OPTIONS = {
-      method: "GET",
+      method: 'GET',
       headers: {
-        accept: "application/json",
+        accept: 'application/json',
         Authorization: `Bearer ${TheMovieDBAPI.token}`,
       },
     };
     let responses = await Promise.all([fetch(urlMovies, OPTIONS), fetch(urlSeries, OPTIONS)]);
 
     if (responses.every((response) => !response.ok && response.status !== 200)) {
-      console.error("Impossible to get movies and series!");
+      console.error('Impossible to get movies and series!');
       return;
     }
 
@@ -43,15 +42,15 @@ export async function getPopularMovies() {
 
   try {
     let response = await fetch(url, {
-      method: "GET",
+      method: 'GET',
       headers: {
-        accept: "application/json",
+        accept: 'application/json',
         Authorization: `Bearer ${TheMovieDBAPI.token}`,
       },
     });
 
     if (!response.ok && response.status !== 200) {
-      console.error("Impossible to get the movies!");
+      console.error('Impossible to get the movies!');
       return;
     }
 
@@ -67,15 +66,15 @@ export async function getPopularMoviesByPage(page) {
 
   try {
     let response = await fetch(url, {
-      method: "GET",
+      method: 'GET',
       headers: {
-        accept: "application/json",
+        accept: 'application/json',
         Authorization: `Bearer ${TheMovieDBAPI.token}`,
       },
     });
 
     if (!response.ok && response.status !== 200) {
-      console.error("Impossible to get the movies!");
+      console.error('Impossible to get the movies!');
       return;
     }
 
@@ -91,15 +90,15 @@ export async function getPopularSeriesByPage(page) {
 
   try {
     let response = await fetch(url, {
-      method: "GET",
+      method: 'GET',
       headers: {
-        accept: "application/json",
+        accept: 'application/json',
         Authorization: `Bearer ${TheMovieDBAPI.token}`,
       },
     });
 
     if (!response.ok && response.status !== 200) {
-      console.error("Impossible to get the movies!");
+      console.error('Impossible to get the movies!');
       return;
     }
 
@@ -116,16 +115,16 @@ export async function getCarouselSelections() {
 
   try {
     const OPTIONS = {
-      method: "GET",
+      method: 'GET',
       headers: {
-        accept: "application/json",
+        accept: 'application/json',
         Authorization: `Bearer ${TheMovieDBAPI.token}`,
       },
     };
     let responses = await Promise.all([fetch(urlMovies, OPTIONS), fetch(urlSeries, OPTIONS)]);
 
     if (responses.every((response) => !response.ok && response.status !== 200)) {
-      console.error("Impossible to get the movies and series!");
+      console.error('Impossible to get the movies and series!');
       return;
     }
 
@@ -149,15 +148,15 @@ export async function getPopularSeries() {
 
   try {
     let response = await fetch(url, {
-      method: "GET",
+      method: 'GET',
       headers: {
-        accept: "application/json",
+        accept: 'application/json',
         Authorization: `Bearer ${TheMovieDBAPI.token}`,
       },
     });
 
     if (!response.ok && response.status !== 200) {
-      console.error("Impossible to get the series!");
+      console.error('Impossible to get the series!');
       return;
     }
 
@@ -173,9 +172,9 @@ export async function getInfos(id, type) {
 
   try {
     const response = await fetch(url, {
-      method: "GET",
+      method: 'GET',
       headers: {
-        accept: "application/json",
+        accept: 'application/json',
         Authorization: `Bearer ${TheMovieDBAPI.token}`,
       },
     });
@@ -191,9 +190,9 @@ export async function getCast(id, type) {
 
   try {
     const response = await fetch(url, {
-      method: "GET",
+      method: 'GET',
       headers: {
-        accept: "application/json",
+        accept: 'application/json',
         Authorization: `Bearer ${TheMovieDBAPI.token}`,
       },
     });
@@ -210,9 +209,9 @@ export async function getSimilars(id, type) {
 
   try {
     const response = await fetch(url, {
-      method: "GET",
+      method: 'GET',
       headers: {
-        accept: "application/json",
+        accept: 'application/json',
         Authorization: `Bearer ${TheMovieDBAPI.token}`,
       },
     });
@@ -229,9 +228,9 @@ export async function getReviews(id, type) {
 
   try {
     const response = await fetch(url, {
-      method: "GET",
+      method: 'GET',
       headers: {
-        accept: "application/json",
+        accept: 'application/json',
         Authorization: `Bearer ${TheMovieDBAPI.token}`,
       },
     });
